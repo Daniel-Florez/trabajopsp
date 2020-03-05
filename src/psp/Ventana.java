@@ -12,11 +12,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -42,6 +47,7 @@ public class Ventana extends JFrame implements ActionListener {
     private JLabel lb_tiempo = new JLabel("tiempo para apagado (seg)");
     private JButton btnApagar = new JButton("Apagar PC");
     private JButton btnApagarEntrada = new JButton("Apagar PC con robot");
+    private JButton btnsocket = new JButton("Mostrar comunicación");
 
     public void confiConstraint(Integer posX, Integer posY, Integer tX, Integer tY, Double weightX, Double weightY, Integer anchor, Integer fill, Component componente, JPanel panel) {
 
@@ -66,6 +72,8 @@ public class Ventana extends JFrame implements ActionListener {
         btnApagar.addActionListener(this);
         btnApagarEntrada.setActionCommand("apagarRobot");
         btnApagarEntrada.addActionListener(this);
+        btnsocket.setActionCommand("mostrar");
+        btnsocket.addActionListener(this);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -80,6 +88,7 @@ public class Ventana extends JFrame implements ActionListener {
         panelSur.setLayout(new GridBagLayout());
         confiConstraint(0, 0, 1, 1, 0.1, 0.1, GridBagConstraints.CENTER, GridBagConstraints.NONE, btnApagar, panelSur);
         confiConstraint(1, 0, 1, 1, 0.1, 0.1, GridBagConstraints.CENTER, GridBagConstraints.NONE, btnApagarEntrada, panelSur);
+        confiConstraint(1, 1, 1, 1, 0.1, 0.1, GridBagConstraints.CENTER, GridBagConstraints.NONE, btnsocket, panelSur);
 
         panel.add(panelCentro, BorderLayout.CENTER);
         panel.add(panelSur, BorderLayout.SOUTH);
@@ -141,6 +150,7 @@ public class Ventana extends JFrame implements ActionListener {
                     tiempo = ((int) txt_tiempo.getValue()) * 1000;
                     tComando.sleep(tiempo);
                     tComando.start();
+                    Cliente c = new Cliente();
                     Thread.sleep(200);
                     System.exit(0);
                 } catch (InterruptedException ex) {
@@ -153,6 +163,7 @@ public class Ventana extends JFrame implements ActionListener {
                     tiempo = ((int) txt_tiempo.getValue()) * 1000;
                     tRobot.sleep(tiempo);
                     tRobot.start();
+                    Cliente c = new Cliente();
                     Thread.sleep(1000);
                     System.exit(0);
                 } catch (InterruptedException ex) {
@@ -160,6 +171,10 @@ public class Ventana extends JFrame implements ActionListener {
             }
 
             break;
+            case "mostrar": {
+                Cliente c = new Cliente();
+                 JOptionPane.showMessageDialog(null, "Conexión correcta");
+            }
         }
     }
 }
